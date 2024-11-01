@@ -1,0 +1,10 @@
+version: 2
+
+models:
+
+  - name: stg_mdv_patientdata
+    columns:
+      - name: patientid
+        quote: true
+        tests:
+          - not_null

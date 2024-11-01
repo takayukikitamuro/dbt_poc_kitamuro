@@ -1,0 +1,50 @@
+version: 2
+
+models:
+
+  - name: stg_jmdc_actdata
+    columns:
+      - name: レセid
+        quote: true
+        tests:
+          - not_null
+      - name: 明細id
+        quote: true
+        tests:
+          - not_null
+  - name: stg_jmdc_disease
+    columns:
+      - name: レセid
+        quote: true
+        tests:
+          - not_null
+      - name: 明細id
+        quote: true
+        tests:
+          - not_null
+  - name: stg_jmdc_drug
+    columns:
+      - name: レセid
+        quote: true
+        tests:
+          - not_null
+      - name: 明細id
+        quote: true
+        tests:
+          - unique
+          - not_null
+  - name: stg_jmdc_facility
+    columns:
+      - name: 医療施設id
+        quote: true
+        tests:
+          - unique
+          - not_null
+  - name: stg_jmdc_receipt
+    columns:
+      - name: レセid
+        quote: true
+        tests:
+          - unique
+          - not_null
+    

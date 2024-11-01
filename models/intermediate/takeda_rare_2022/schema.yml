@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: vwd_confirmed_yearmonth
+    columns:
+      - name: 加入者id
+        quote: true
+        tests:
+          - unique
+          - not_null
+      - name: 診療年月
+        quote: true
+        tests:
+          - unique
+          - not_null
+  - name: vwd_diagnostic_flag
+  - name: vwd_drug_prescription_yearmonth
+  - name: vwd_exam_yearmonth
+  - name: vwd_paneldata_wrk1
+  - name: vwd_paneldata_wrk2
+  - name: vwd_patients_broad
+  - name: vwd_patients_narrow
+  - name: vwd_patients_standard
+  - name: vwd_suspected_yearmonth
+  - name: vwd_visit_adm

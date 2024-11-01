@@ -1,0 +1,297 @@
+version: 2
+
+
+sources:
+  - name: takeda
+    description: database description
+    tables:
+      - name: jmdc_actdata
+        description: 患者に対し発行されたレセプト上の診療行為情報
+        columns:
+          - name: レセid
+            description: JMDCがレセプトごとに一意に割り付けたコード
+            quote: true
+            tests:
+              - not_null
+      - name: jmdc_patient
+        description: データ期間内にJMDC保険者データベースに在籍する加入者情報(生年月/性別など)
+
+sources:
+  - name: takeda
+    description: >
+      JMDC保険者データベース(日本全国の健康保険組合から収集された、レセプト・健康診断結果・加入者台帳の情報)
+    tables:
+      - name: jmdc_actdata
+        description: 患者に対し発行されたレセプト上の診療行為情報
+        columns:
+          - name: 加入者id
+            description: JMDCが加入者ごとに一意に割り付けたコード
+          - name: レセid
+            description: JMDCがレセプトごとに一意に割り付けたコード
+            quote: true
+            tests:
+              - not_null
+          - name: 明細id
+            description: 同一レセID内のレコードごとに一意に割り付けたユニークID
+            quote: true
+            tests:
+              - not_null
+          - name: レセ種別
+            description: レセプトの種類
+          - name: 診療年月
+            description: 診療した年月
+          - name: 実施年月日
+            description: >
+              当該診療行為を実施した年月日
+              (DPCコーディングデータは2009年1月以降、医科レセプトは2012年4月以降)
+          - name: 医療施設id
+            description: JMDCが医療施設に一意に割り付けたコード
+          - name: 標準化診療行為コード
+            description: 診療報酬情報提供サービスの医科診療行為マスタの診療行為コード
+          - name: 標準化診療行為バージョン
+            description: 診療報酬大改定ごとのバージョン
+          - name: 標準化診療行為名
+            description: 診療報酬情報提供サービスの医科診療行為マスタの診療行為名
+          - name: 回数
+            description: 診療行為の行われた回数
+          - name: 同時id
+            description: 同一診療区分で同時に実施した診療行為ごとのID
+          - name: 診療区分
+            description: 医科レセプトに記載される診療行為の場面についての区分
+          - name: 1回あたり点数
+            description: 診療報酬上の1回あたりの点数(マスタ記載の点数、単位:点、1点=10円)
+          - name: 1回あたり加算割合
+            description: 診療報酬上の1回あたりの加算割合(%)
+          - name: 1回あたり金額
+            description: 診療報酬上の1回あたりの加算金額(単位：円)
+          - name: レセプト記載点数
+            description: レセプトに記載された1回あたりの点数(1点=10円)
+      - name: jmdc_disease
+        description: 患者に対し発行されたレセプト上の傷病情報
+        columns:
+          - name: 加入者id
+            description: JMDCが加入者ごとに一意に割り付けたコード
+          - name: レセid
+            description: JMDCがレセプトごとに一意に割り付けたコード
+            quote: true
+            tests:
+              - not_null
+          - name: 明細id
+            description: 同一レセID内のレコードごとに一意に割り付けたユニークID
+            quote: true
+            tests:
+              - not_null
+          - name: レセ種別
+            description: レセプトの種類
+          - name: 診療年月
+            description: 診療した年月
+          - name: 医療施設id
+            description: JMDCが医療施設に一意に割り付けたコード
+          - name: 標準傷病コード
+            description: (財)医療情報システム開発センター(MEDIS-DC)が作成しているレセ電算コード
+          - name: 標準病名
+            description: (財)医療情報システム開発センター(MEDIS-DC)が作成している病名
+          - name: 主傷病フラグ
+            description: その傷病が主傷病の場合のフラグ
+          - name: 入院の契機となった傷病フラグ
+            description: DPCに記載される、当該傷病が入院の契機となった場合のフラグ(DPCレセプトのみ)
+          - name: 疑いフラグ
+            description: その傷病に疑いの記載がある場合のフラグ
+          - name: 診療開始年月日
+            description: その医療施設においてその疾患の診療を開始した年月日
+          - name: 転帰
+            description: 標準病名ごとに記録される病態の経過
+          - name: 死亡フラグ
+            description: 転帰欄より転帰が死亡であると確認できる場合のフラグ
+          - name: 増悪フラグ
+            description: 転帰欄より転帰が増悪であると確認できる場合のフラグ(DPCレセプトのみ)
+      - name: jmdc_drug
+        description: 患者に対し発行されたレセプト上の医薬品情報
+        columns:
+          - name: 加入者id
+            description: JMDCが加入者ごとに一意に割り付けたコード
+          - name: レセid
+            description: JMDCがレセプトごとに一意に割り付けたコード
+            quote: true
+            tests:
+              - not_null
+          - name: 明細id
+            description: 同一レセID内のレコードごとに一意に割り付けたユニークID
+            quote: true
+            tests:
+              - not_null
+          - name: レセ種別
+            description: レセプトの種類
+          - name: 診療年月
+            description: 診療した年月
+          - name: 医療施設id
+            description: JMDCが医療施設に一意に割り付けたコード
+          - name: 医薬品コード
+            description: 医薬品に振られている、JMDC独自のユニークID
+          - name: 医薬品名
+            description: 各製薬会社の販売名
+          - name: 薬価
+            description: 投与量単位ごとの薬価
+          - name: 処方日
+            description: >
+              薬剤が処方された年月日
+              (DPCコーディングデータは2009年1月以降、医科レセプトは2012年4月以降のみ情報あり)
+          - name: 調剤日
+            description: >
+              薬剤が調剤された年月日
+              DPC、医科レセプトの調剤日=処方日
+          - name: 1処方あたりの1日投与量
+            description: 診療ごとに処方された薬剤の1日投与量(液剤、貼布、軟膏剤は1回投与量)
+          - name: 投与量単位
+            description: JMDC定義により投与量を算出した場合の単位
+          - name: 1処方あたりの投与日数
+            description: 診療ごとに処方された薬剤の投与日数(液剤、貼布、軟膏剤は投与回数)
+          - name: 投薬量
+            description: 1処方あたりの1日投与量*投与日数
+          - name: 同時id
+            description: 医科/DPCレセプトの場合、同一診療区分内における同時に処方された医薬品ごとに付与されたID。調剤レセプトの場合、同一調剤日・調剤レセプトにおける剤形・用法用量ごとに付与されたID
+          - name: 頓服フラグ
+            description: 頓服指示のあった薬剤のフラグ
+          - name: 診療区分
+            description: 医科レセプトに記載される薬剤の投与場面についての区分
+          - name: 処方金額
+            description: >
+              薬価×投薬量(円)
+              レセプトで計算される薬剤費とは異なり、当該薬剤の薬価×投薬量で計算した値
+              (レセプトで計算される薬剤費は、内用薬では同一処方用法の1日分はまとめて薬剤料が計算される等、当該薬剤単独での薬剤費の計算が出来ないケースがある為)
+          - name: 調剤料
+            description: 調剤報酬における調剤技術料(単位：点、調剤レセプトのみ)
+          - name: 薬剤料
+            description: 同時IDごとに算出された「薬価(点数)ｘ投薬量」の合計(調剤レセプトのみ)
+          - name: 加算料
+            description: 調剤報酬における加算料(単位：点、調剤レセプトのみ)
+          - name: レセプト記載点数
+            description: >
+              レセプトに記載された1日(回)あたりの点数
+              (1点=10円)
+          - name: 総点数
+            description: >
+              レセプトあたりの医療費(単位：点)
+              同一レセidには、同じ点数が入る
+
+      - name: jmdc_facility
+        description: 患者が通院した医療施設の情報
+        columns:
+          - name: 医療施設id
+            description: JMDCが医療施設に一意に割り付けたコード
+            quote: true
+            tests:
+              - unique
+              - not_null
+          - name: ベッド数
+            description: 施設のベッド数
+          - name: hpgp区分
+            description: 施設の病床規模 HP (100床以上)、GP(99床以下)
+          - name: 診療科大分類
+            description: 施設の第一標榜診療科をJMDC診療科マスタ大分類で表出(null:不明)
+          - name: 診療科中分類
+            description: 施設の第一標榜診療科をJMDC診療科マスタ中分類で表出(null:不明)
+          - name: 経営体
+            description: >
+              病院情報の経営体データから、JMDC独自に定義した分類。
+              - 国公立病院:国立病院及び都道府県・市町村立病院で20床以上
+              - 大学病院:医学部のある国公立・私立の大学病院(歯学部単科病院は含まない)
+              - その他の病院:国公立病院、大学病院にあてはまらない20床以上の病院
+              - 診療所:19床以下の診療所
+          - name: 在宅療養支援診療所
+            description: >
+              都道府県社会保険事務局へ在宅療養支援診療所の届出をしている施設
+              JMDCが年に一度、都道府県社会保険事務局に情報開示請求で調査
+          - name: がん診療連携拠点病院
+            description: >
+              厚生労働大臣より指定された地域・都道府県がん診療拠点病院
+              厚生労働省ホームページより毎年更新
+          - name: dpc導入医療機関
+            description: >
+              DPCにより医療費を算定している施設
+              厚生労働省ホームページより毎年更新
+          - name: 特定機能病院
+            description: >
+              厚生労働省が指定した特定機能病院
+              厚生労働省ホームページより毎年更新
+      - name: jmdc_patient
+        description: データ期間内にJMDC保険者データベースに在籍する加入者情報(生年月/性別など)
+        columns:
+          - name: "加入者id"
+            description: JMDCが加入者ごとに一意に割り付けたコード
+            quote: true
+            tests:
+              - unique
+              - not_null
+          - name: 加入者生年月
+            description: 加入者の生年月
+          - name: 加入者性別
+            description: 加入者の性別
+          - name: 家族id
+            description: 世帯ごとに一意に割り付けたコード
+          - name: 本人家族コード
+            description: 加入者の本人家族区分(コード表出)
+          - name: 本人家族
+            description: 加入者の本人家族区分
+          - name: 続柄コード
+            description: 加入者の本人との関係(コード表出)
+          - name: 続柄
+            description: 加入者の本人との関係
+          - name: 観察開始年月
+            description: 加入者ごとに分析範囲内で観察可能な最初の年月
+          - name: 観察終了年月
+            description: 加入者ごとに分析範囲内で観察可能な最後の年月
+          - name: 観察終了理由(死亡)フラグ
+            description: 観察終了事由が死亡の場合にフラグ1
+      - name: jmdc_receipt
+        description: 患者に対し発行されたレセプトの基本情報(診療年月、診療科など)
+        columns:
+          - name: 加入者id
+            description: JMDCが加入者ごとに一意に割り付けたコード
+          - name: レセid
+            description: JMDCがレセプトごとに一意に割り付けたコード
+            quote: true
+            tests:
+              - unique
+              - not_null
+          - name: レセ種別
+            description: レセプトの種類
+          - name: 診療年月
+            description: 診療した年月
+          - name: 紙レセフラグ
+            description: JMDCにて処理したレセプト原本が紙レセプトかどうか。(nullの場合は、電子レセプト)
+          - name: 医療施設id
+            description: JMDCが医療施設に一意に割り付けたコード
+          - name: 診療科大分類
+            description: レセプトに記載のある診療科をJMDC診療科マスタ大分類で表出(null:不明)
+          - name: 診療科中分類
+            description: レセプトに記載のある診療科をJMDC診療科マスタ中分類で表出(null:不明)
+          - name: レセプト診療科
+            description: レセプトに記載のある診療科(null:不明)
+          - name: 診療実日数
+            description: >
+              レセプトに記載のある診療実日数
+              - 外来レセプト:当該月の通院・往診・オンライン診療等の日数合計
+              - 入院/DPCレセプト:当該月の入院日数合計
+          - name: 入院日
+            description: >
+              レセプト記載の入院基本料の起算日としての入院年月日
+              DPCレセプトの場合は、今回入院年月日
+          - name: 退院日
+            description: DPC記載の退院日:DPCレセプトのみ
+          - name: 総点数
+            description: >
+              レセプトあたりの医療費(単位:点)
+              同一レセidには、同じ点数が入る
+  - name: mtpc-raw
+    description: mtpc-raw
+    tables:
+      - name: mdv_patientdata
+        description: mdv_patientdata
+        columns:
+          - name: patientid
+          - name: laboflg
+          - name: startdatamonth
+          - name: enddatamonth
+          - name: hpscalecode
+          - name: cancerflg

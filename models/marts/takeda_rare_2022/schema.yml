@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: vwd_paneldata
+    columns:
+      - name: 加入者id
+        quote: true
+        tests:
+          - unique
+          - not_null
+      - name: 診療年月
+        quote: true
+        tests:
+          - unique
+          - not_null

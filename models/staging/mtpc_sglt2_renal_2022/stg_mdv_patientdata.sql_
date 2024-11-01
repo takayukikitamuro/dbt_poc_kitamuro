@@ -1,0 +1,21 @@
+WITH
+  source AS (
+    SELECT
+      *
+    FROM {{ source('mtpc-raw', 'mdv_patientdata') }}
+  ),
+
+  renamed AS (
+    SELECT
+      patientid,
+      laboflg,
+      startdatamonth,
+      enddatamonth,
+      hpscalecode,
+      cancerflg
+    FROM source
+  )
+
+SELECT
+  *
+FROM renamed
